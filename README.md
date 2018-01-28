@@ -1,11 +1,11 @@
-# HTTP server in C
+# Minimal Python Flask application
+This web application is based an introduction to background worker processes in Heroku, which can be found at the [Heroku Devcenter](https://devcenter.heroku.com/articles/python-rq).
 
-A minimal HTTP server, written in C by [Jan Ahrens](https://github.com/JanAhrens/ipconfig-http-server). I've modified it to work as a general-purpose HTTP server.
+I've made the 'web' process return a job id instead of the actual job result. The job id can be saved by the client, and used subsequently to long-poll the web process. Once the worker is done, when queried with the job id, the web process returns the result.
 
-The C script is compiled using the Heroku C buildpack. Once you've created an app with the C [buildpack](https://github.com/heroku/heroku-buildpack-c), you can...
+I've also added app.json and this readme so you can:
 
 ## Deploy to Heroku
+By clicking the button below.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-(The requirement for the C buildpack, which is not automatically detected, and my inability to get app.json to work, means you will have to deploy use Heroku CLI. Don't use the button above, which is just for visual interest right now.)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)

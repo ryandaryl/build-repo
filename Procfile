@@ -1,1 +1,2 @@
-web: ./main $PORT
+web: python app.py
+worker: python worker.py

@@ -1,0 +1,5 @@
+requests
+Flask==0.12
+rq
+matplotlib
+tensorflow
