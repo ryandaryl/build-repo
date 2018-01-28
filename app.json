@@ -1,0 +1,20 @@
+{
+  "name": "Start on Heroku: Python",
+  "description": "A barebones Python app, which can easily be deployed to Heroku.",
+  "image": "heroku/python",
+  "repository": "https://github.com/heroku/python-getting-started",
+  "keywords": ["python", "django" ],
+  "addons": [ "heroku-postgresql" ],
+  "env": {
+		"para_csp_header": {
+			"description": "The value of the CSP header (leave blank to use the default value)",
+			"required": false,
+			"value": ""
+		}
+  },
+  "buildpacks": [
+    {
+      "url": "http://github.com/heroku/heroku-buildpack-c.git"
+    }
+  ]
+}
