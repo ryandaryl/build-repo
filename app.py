@@ -8,7 +8,7 @@ app = Flask(__name__)
 q = Queue(connection=conn)
 
 def get_status(job):
-    app_url = 'https://rnn-rdm.herokuapp.com'
+    app_url = 'https://tensor-rdm.herokuapp.com'
     status = {
         'id': job.id,
         'result': job.result,
@@ -17,7 +17,7 @@ def get_status(job):
         'link': ''
     }
     options = {
-        'status': failed
+        'status': 'failed'
     } if job.is_failed else {
         'status': 'pending',
         'message': 'Still working. Wait a few minutes and click the link to see if the job is ready.',
@@ -42,7 +42,7 @@ def handle_job():
         else:
             response = { 'id': None, 'error_message': 'No job exists with the id number ' + query_id }
     else:
-        new_job = q.enqueue(run_script, 'scripts/fit_a_line.py', timeout='1h')
+        new_job = q.enqueue(run_script, timeout='1h')
         response = render_template('wait.html', status=get_status(new_job))
     return response
 
