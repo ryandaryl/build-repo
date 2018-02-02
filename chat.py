@@ -3,7 +3,7 @@
 import os
 import logging
 import redis
-import asyncio
+import gevent
 from flask import Flask, render_template
 from flask_sockets import Sockets
 from rq import Queue
@@ -49,20 +49,18 @@ class ChatBackend(object):
         except Exception:
             self.clients.remove(client)
 
-    async def run(self):
+    def run(self):
         """Listens for new messages in Redis, and sends them to clients."""
         for data in self.__iter_data():
             for client in self.clients:
-                await asyncio.wait(asyncio.ensure_future(self.send, client, data))
+                gevent.spawn(self.send, client, data)
 
-    async def start(self):
+    def start(self):
         """Maintains Redis subscription in the background."""
-        await asyncio.wait(asyncio.ensure_future(self.run))
+        gevent.spawn(self.run)
 
-ioloop = asyncio.get_event_loop()
 chats = ChatBackend()
-ioloop.run_until_complete(chats.start())
-ioloop.close()
+chats.start()
 
 
 @app.route('/')
@@ -71,11 +69,11 @@ def hello():
     return render_template('index.html')
 
 @sockets.route('/submit')
-async def inbox(ws):
+def inbox(ws):
     """Receives incoming chat messages, inserts them into Redis."""
     while not ws.closed:
         # Sleep to prevent *constant* context-switches.
-        await asyncio.sleep(0.1)
+        gevent.sleep(0.1)
         message = ws.receive()
 
         if message:
@@ -83,10 +81,13 @@ async def inbox(ws):
             redis.publish(REDIS_CHAN, message)
 
 @sockets.route('/receive')
-async def outbox(ws):
+def outbox(ws):
     """Sends outgoing chat messages, via `ChatBackend`."""
     chats.register(ws)
 
     while not ws.closed:
         # Context switch while `ChatBackend.start` is running in the background.
-        await asyncio.sleep(0.1)
+        gevent.sleep(0.1)
+
+
+

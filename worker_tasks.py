@@ -1,7 +1,6 @@
 import os, json
 import redis
 import datetime as dt
-from mnist import random_image
 
 REDISCLOUD_URL = os.environ['REDISCLOUD_URL']
 REDIS_CHAN = 'chat'
@@ -10,11 +9,9 @@ start_time = dt.datetime.now()
 interval = 10 # seconds
 
 def publish(value):
-    message = json.dumps({
-                           'id': 'worker',
-                           'time_stamp': str(dt.datetime.now())
-                         })
-    message.update(value)
+    message = json.dumps({ 'id': 'worker',
+                           'time_stamp': str(dt.datetime.now()),
+                           'value': value })
     redis.publish(REDIS_CHAN, message)
 
 def print_time():
@@ -25,6 +22,6 @@ def print_time():
       delta=dt.datetime.now()-t
       if delta.seconds >= interval:
          value = i
-         publish(random_image())
+         publish(value)
          i += 1
          t = dt.datetime.now()
