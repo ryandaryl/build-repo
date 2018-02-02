@@ -3,7 +3,7 @@
 import os
 import logging
 import redis
-import gevent
+import asyncio
 from flask import Flask, render_template
 from flask_sockets import Sockets
 from rq import Queue
@@ -53,15 +53,17 @@ class ChatBackend(object):
         """Listens for new messages in Redis, and sends them to clients."""
         for data in self.__iter_data():
             for client in self.clients:
-                gevent.spawn(self.send, client, data)
+                self.send(client, data)
 
     def start(self):
         """Maintains Redis subscription in the background."""
-        gevent.spawn(self.run)
+        loop = asyncio.get_event_loop()
+        loop.run_forever(self.run)
+        loop.close()
+        
 
 chats = ChatBackend()
 chats.start()
-
 
 @app.route('/')
 def hello():
@@ -72,10 +74,7 @@ def hello():
 def inbox(ws):
     """Receives incoming chat messages, inserts them into Redis."""
     while not ws.closed:
-        # Sleep to prevent *constant* context-switches.
-        gevent.sleep(0.1)
         message = ws.receive()
-
         if message:
             app.logger.info(u'Inserting message: {}'.format(message))
             redis.publish(REDIS_CHAN, message)
@@ -84,10 +83,3 @@ def inbox(ws):
 def outbox(ws):
     """Sends outgoing chat messages, via `ChatBackend`."""
     chats.register(ws)
-
-    while not ws.closed:
-        # Context switch while `ChatBackend.start` is running in the background.
-        gevent.sleep(0.1)
-
-
-
