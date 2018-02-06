@@ -1,0 +1,21 @@
+{
+  "name": "Heroku-Github",
+  "description": "Web utilities for Heroku and Github.",
+  "repository": "https://github.com/ryandaryl/heroku-github",
+  "logo": "http://www.unixstickers.com/image/data/stickers/python/python.sh.png",
+  "keywords": ["python", "flask", "heroku", "github", "RESTful"],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}
