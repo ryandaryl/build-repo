@@ -4,6 +4,7 @@
   "repository": "https://github.com/ryandaryl/heroku-github",
   "logo": "http://www.unixstickers.com/image/data/stickers/python/python.sh.png",
   "keywords": ["python", "flask", "heroku", "github", "RESTful"],
+  "addons": [ "redis" ],
   "formation": {
     "worker": {
       "quantity": 1,
