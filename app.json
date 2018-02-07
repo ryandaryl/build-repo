@@ -4,4 +4,9 @@
   "description": "This React App was built on a Heroku dyno, and combined with a minimal Flask server.",
   "logo": "http://www.unixstickers.com/image/data/stickers/python/python.sh.png",
   "keywords": ["python", "flask", "react", "node.js"]
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
 }
