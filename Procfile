@@ -1,1 +1,2 @@
-web: gunicorn gettingsxxxxxx.wsgi
+
+web: python app.py

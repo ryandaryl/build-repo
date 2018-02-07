@@ -1,22 +1,12 @@
+
 {
-  "name": "Start on Heroku: Python",
-  "description": "A barebones Python app, which can easily be deployed to Heroku.",
-  "image": "heroku/python",
-  "repository": "https://github.com/heroku/python-getting-sxxxxxx",
-  "keywords": ["python", "django" ],
-  "addons": [ "heroku-postgresql" ],
-  "env": {
-    "SECRET_KEY": {
-      "description": "The secret key for the Django application.",
-      "generator": "secret"
+  "name": "React App",
+  "description": "This React App was built on a Heroku dyno, and combined with a minimal Flask server.",
+  "logo": "http://www.unixstickers.com/image/data/stickers/python/python.sh.png",
+  "keywords": ["python", "flask", "react", "node.js"],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
     }
-  },
-  "environments": {
-    "test": {
-      "scripts": {
-        "test-setup": "python manage.py collectstatic --noinput",
-        "test": "python manage.py test"
-      }
-    }
-  }
+  ]
 }
