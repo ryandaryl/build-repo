@@ -1,6 +1,6 @@
 import os
 from gunicorn.app.base import BaseApplication
-import project
+from gettingstarted.wsgi import application as app
 
 #https://programtalk.com/python-examples/gunicorn.app.base.BaseApplication/
 def run_server(app, host, port):
@@ -22,6 +22,4 @@ def run_server(app, host, port):
     FlaskGUnicornApp().run()
 
 if __name__ == '__main__':
-    host = '0.0.0.0'
-    port = os.environ.get('PORT', 8000)
-    run_server(project.app, host, port)
+    run_server(app, '0.0.0.0', os.environ.get('PORT', 8000))

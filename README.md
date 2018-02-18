@@ -1,11 +1,44 @@
-[![Build Status](https://travis-ci.org/ryandaryl/flask-restful-blueprint.svg?branch=master)](https://travis-ci.org/ryandaryl/flask-restful-blueprint)
+# Python: Getting Started
 
-# Python Flask-RESTful-Blueprints starter
-This starter app exposes a simple RESTful API, using Flask Blueprints to organise sections of the project. It is based on this 2014 [blog post](http://craigglennie.com/programming/python/2014/02/05/using-blueprints-with-flask-restful/) from [Craig Lennie](http://craigglennie.com/).
+A barebones Django app, which can easily be deployed to Heroku.
 
-I've added app.json and this readme so you can:
+This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.
 
-## Deploy to Heroku
-By clicking the button below.
+## Running Locally
+
+Make sure you have Python [installed properly](http://install.python-guide.org). Also, install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) and [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).
+
+```sh
+$ git clone git@github.com:heroku/python-getting-started.git
+$ cd python-getting-started
+
+$ pipenv install
+
+$ createdb python_getting_started
+
+$ python manage.py migrate
+$ python manage.py collectstatic
+
+$ heroku local
+```
+
+Your app should now be running on [localhost:5000](http://localhost:5000/).
+
+## Deploying to Heroku
+
+```sh
+$ heroku create
+$ git push heroku master
+
+$ heroku run python manage.py migrate
+$ heroku open
+```
+or
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+## Documentation
+
+For more information about using Python on Heroku, see these Dev Center articles:
+
+- [Python on Heroku](https://devcenter.heroku.com/categories/python)
