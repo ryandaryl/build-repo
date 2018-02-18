@@ -4,3 +4,5 @@ gunicorn
 behave_rest
 pyyaml
 whitenoise
+coverage
+coveralls
