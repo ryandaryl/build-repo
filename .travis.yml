@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.6"
+install: "pip install -r requirements.txt"
+env:
+  - FLASK_ENV = 'Testing'
+before_script:
+  - (gunicorn project:app &)
+  - cd tests
+script: behave

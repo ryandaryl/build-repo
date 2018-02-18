@@ -1,5 +1,7 @@
-# Minimal Python Flask application
-This web application consists entirely of the three files mentioned in [Adam Wiggin](https://blog.heroku.com/authors/adam-wiggins)'s Python / Django blog [post](https://blog.heroku.com/python_and_django) from 2011.
+[![Build Status](https://travis-ci.org/ryandaryl/flask-restful-blueprint.svg?branch=master)](https://travis-ci.org/ryandaryl/flask-restful-blueprint)
+
+# Python Flask-RESTful-Blueprints starter
+This starter app exposes a simple RESTful API, using Flask Blueprints to organise sections of the project. It is based on this 2014 [blog post](http://craigglennie.com/programming/python/2014/02/05/using-blueprints-with-flask-restful/) from [Craig Lennie](http://craigglennie.com/).
 
 I've added app.json and this readme so you can:
 
