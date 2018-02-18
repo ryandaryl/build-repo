@@ -29,12 +29,16 @@ def run_gunicorn():
     print(stdout)
 
 def run_behave():
+    os.chdir('tests')
+    os.system('(sleep 10 && behave &)')
+    '''
     time.sleep(30)
     os.chdir('tests')
     process = Popen(['behave'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = process.communicate()
     print(stdout)
+    '''
 
 if __name__ == '__main__':
-    run_behave()
+    #run_behave()
     run_server(app, '0.0.0.0', int(os.environ.get('PORT', 8000)))
