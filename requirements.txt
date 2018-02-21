@@ -1,7 +1,3 @@
+
 Flask==0.12
-flask-restful
-gunicorn
-behave_rest
-pyyaml
-whitenoise
-coverage
+flask-login
