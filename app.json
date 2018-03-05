@@ -1,0 +1,7 @@
+{
+  "name": "ACE editor",
+  "description": "This is a copy of the open source ACE editor.",
+  "repository": "https://github.com/ajaxorg/ace",
+  "logo": "https://raw.githubusercontent.com/ajaxorg/ace/master/doc/site/images/logo.png",
+  "keywords": ["ACE", "Cloud 9", "Editor", "Python"]
+}
