@@ -1,38 +1,53 @@
 
-import os, json, hashlib
-from io import BytesIO
-import requests
-from shapely.geometry import Polygon, mapping
-from PIL import Image
-from flask import Flask, jsonify, request
+import os
+import logging
+from flask import Flask, request, jsonify
+from celery import Celery
+
+broker = os.environ['REDIS_URL']
+backend = os.environ['REDIS_URL']
+name = os.environ.get('CELERY_NAME', 'default_name')
+
 app = Flask(__name__)
 
-with open('boundaries_by_hash.json') as fh:
-  for i in fh:
-    boundaries_by_hash = json.loads(i)
+celery = Celery(name, broker=broker, backend=backend)
 
-@app.route("/predict_single_image", methods=['POST'])
-def inference():
-  url = request.get_json()['image_url']
-  response = requests.get(url)
-  image = Image.open(BytesIO(response.content))
-  hash = hashlib.md5(image.tobytes()).hexdigest()
-  boundaries = ['ILM (ILM)', 'Inner boundary of RPE (IB_RPE)']
-  ilm, inner_rpe = [mapping(Polygon(boundaries_by_hash[hash][i]).simplify(1))['coordinates'][0][:-1] for i in boundaries]
-  predictions = [
-    {
-      "class": "ILM",
-      "confidence": 1,
-      "polygon": ilm
-    },
-    {
-      "class": "Inner RPE",
-      "confidence": 1,
-      "polygon": inner_rpe
+@app.route('/tasks/<task_id>')
+def check_task(task_id):
+    task = celery.AsyncResult(task_id)
+
+    if task.state == 'FAILURE':
+        result = None
+        error = str(task.result)
+    else:
+        result = task.result
+        error = None
+
+    if isinstance(result, Exception):
+        result = str(result)
+
+    response = {
+        'id': task_id,
+        'state': task.state,
+        'result': result,
+        'error': error,
     }
-  ]
-  return jsonify(predictions)
+    response = jsonify(response)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
 
-if __name__ == "__main__":
-  port = int(os.environ.get("PORT", 5000))
-  app.run(host='0.0.0.0', port=port)
+@app.route('/')
+def index():
+   with open('form.html') as fh:
+     html = fh.read()
+   return html
+
+@app.route('/search/')
+def handle_job():
+    task = celery.send_task('celery_worker.search', args=[request.args], soft_time_limit=120)
+    response = check_task(task.id)
+    return response
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 80))
+    app.run(host='0.0.0.0', port=port)
